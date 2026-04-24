@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PoliSi Admin — Control de códigos</title>
+<title>PoliSi — Simulador IPN Licenciatura</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -14,203 +14,328 @@
   --accent:#ffffff; --accent-soft:#e8d0d8;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Outfit',system-ui;min-height:100vh;padding:20px;}
-.container{max-width:1200px;margin:0 auto;}
-.header{background:linear-gradient(135deg,#1a0810,#722F37,#1a0810);border-bottom:2px solid var(--accent);padding:20px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center;}
-.header-title{font-size:22px;font-weight:800;color:#fff;}
-.header-sub{font-size:12px;color:var(--gray);margin-top:4px;}
-.tab-nav{display:flex;gap:4px;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;}
-.tab-btn{padding:14px 20px;background:transparent;border:none;color:var(--gray);font-family:'Outfit';font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-.tab-content{display:none;padding:24px;background:var(--bg2);border-radius:0 0 12px 12px;}
-.tab-content.active{display:block;}
-.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;}
-.card-title{font-size:16px;font-weight:800;color:var(--accent-soft);margin-bottom:12px;}
-.card-sub{font-size:12px;color:var(--gray);margin-bottom:16px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
-label{display:block;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-input,select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit';font-size:14px;padding:10px 12px;outline:none;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',system-ui;min-height:100vh;overflow-x:hidden;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+.header{background:linear-gradient(135deg,#1a0810,#722F37,#1a0810);border-bottom:2px solid var(--accent);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#722F37;flex-shrink:0;}
+.header-title{font-size:16px;font-weight:800;color:#fff;}
+.header-sub{font-size:10px;color:var(--gray);}
+.content{flex:1;max-width:680px;width:100%;margin:0 auto;padding:24px 16px;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
+.card-title{font-size:17px;font-weight:800;color:var(--accent-soft);margin-bottom:6px;}
+.card-sub{font-size:12px;color:var(--gray);margin-bottom:20px;line-height:1.6;}
+label{display:block;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:14px;}
+input,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',monospace;font-size:14px;padding:11px 14px;outline:none;}
 input:focus,select:focus{border-color:var(--accent);}
-.btn{background:linear-gradient(135deg,var(--primary),#5a1a2e);border:1px solid var(--accent);color:var(--accent);font-family:'Outfit';font-weight:700;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;}
-.btn:disabled{opacity:0.5;cursor:not-allowed;}
-.btn-verde{background:linear-gradient(135deg,#166534,#15803d);border-color:#22c55e;color:#4ade80;}
-.btn-rojo{background:linear-gradient(135deg,#991b1b,#7f1d1d);border-color:#ef4444;color:#fca5a5;}
-.btn-small{padding:6px 12px;font-size:11px;}
-.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-top:12px;}
+.btn{width:100%;background:linear-gradient(135deg,var(--primary),#5a1a2e);border:1px solid var(--accent);color:var(--accent);font-weight:700;padding:14px;border-radius:10px;cursor:pointer;text-transform:uppercase;font-size:14px;margin-top:20px;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-blocked{background:linear-gradient(135deg,#4B5563,#333);border-color:#666;color:#999;}
+.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-top:12px;display:none;}
 .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;}
-.msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#4ade80;}
-.msg.info{background:rgba(139,34,82,0.15);border:1px solid rgba(139,34,82,0.3);color:var(--accent-soft);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{text-align:left;padding:10px;color:var(--gray);font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border);}
-td{padding:10px;border-bottom:1px solid var(--border);}
-.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;}
-.badge-activo{background:rgba(34,197,94,0.2);color:#4ade80;}
-.badge-bloqueado{background:rgba(239,68,68,0.2);color:#f87171;}
-.badge-iycfm{background:rgba(59,130,246,0.2);color:#93c5fd;}
-.badge-cmb{background:rgba(236,72,153,0.2);color:#f9a8d4;}
-.badge-csya{background:rgba(245,158,11,0.2);color:#fcd34d;}
-#auth-screen{display:flex;align-items:center;justify-content:center;min-height:80vh;}
-.auth-box{background:var(--bg2);border:2px solid var(--accent);border-radius:16px;padding:30px;max-width:360px;width:100%;text-align:center;}
-.preset-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-.preset-btn{padding:6px 12px;background:var(--bg2);border:1px solid var(--border);color:var(--gray);border-radius:6px;cursor:pointer;font-size:11px;}
-.preset-btn:hover{border-color:var(--accent);color:var(--accent);}
-.result-code{background:rgba(34,197,94,0.1);border-left:3px solid #22c55e;padding:14px;border-radius:8px;margin-top:14px;}
-.result-code-val{font-family:'Courier New',monospace;font-size:20px;font-weight:800;color:#4ade80;letter-spacing:2px;margin:6px 0;}
+.msg.ok{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#4ade80;}
+.msg.show{display:block;}
+.timer-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;text-align:center;min-width:90px;}
+.timer-val{font-size:18px;font-weight:800;color:var(--success);}
+.timer-label{font-size:9px;color:var(--gray);text-transform:uppercase;}
+.modal-overlay{position:fixed;inset:0;background:rgba(18,8,16,0.95);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--bg2);border:2px solid var(--accent);border-radius:20px;padding:28px;max-width:400px;width:100%;}
+.modal-title{font-size:20px;font-weight:800;color:var(--accent-soft);margin-bottom:12px;}
+.modal-txt{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btns .btn{margin-top:0;flex:1;}
+.progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:10px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width 0.3s;}
+.area-badge{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--accent-soft);margin-bottom:16px;font-weight:600;}
+.area-info{background:rgba(139,34,82,0.15);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--accent-soft);}
+.preguntas-nav{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:16px;justify-content:center;}
+.nav-q{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--gray);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.nav-q.respondida{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.4);color:#4ade80;}
+.nav-q.actual{border-color:var(--accent);color:var(--accent);background:rgba(114,47,55,0.15);}
+.opciones{display:flex;flex-direction:column;gap:8px;}
+.opcion{background:var(--bg3);border:2px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:13px;}
+.opcion.selected{border-color:var(--accent);background:rgba(114,47,55,0.15);}
+.opcion-letra{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gray);}
+.opcion.selected .opcion-letra{border-color:var(--accent);color:var(--accent);}
+.score-big{text-align:center;padding:24px 0;}
+.score-num{font-size:64px;font-weight:800;color:var(--accent);line-height:1;}
+.score-total{font-size:18px;color:var(--gray);margin-top:4px;}
+.result-section{background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:12px;border-left:3px solid var(--danger);}
+.result-section.fuerte{border-left-color:var(--success);}
+.result-title{font-weight:700;font-size:13px;margin-bottom:4px;}
+.result-desc{font-size:11px;color:var(--gray);line-height:1.5;}
 </style>
 </head>
 <body>
 
-<div id="auth-screen">
-  <div class="auth-box">
-    <div style="font-size:40px;margin-bottom:10px;">🔐</div>
-    <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">PoliSi Admin</div>
-    <div style="font-size:12px;color:var(--gray);margin-bottom:20px;">Ingresa el PIN</div>
-    <input type="password" id="pin-input" placeholder="PIN" style="text-align:center;letter-spacing:3px;font-size:16px;margin-bottom:12px;" onkeypress="if(event.key==='Enter')validarPin()">
-    <button class="btn" onclick="validarPin()" style="width:100%;">Acceder →</button>
-    <div id="auth-msg" class="msg" style="display:none;margin-top:12px;"></div>
+<div class="modal-overlay" id="modal-inicio">
+  <div class="modal-box">
+    <div class="modal-title">⚠️ ¿Listo?</div>
+    <div class="modal-txt" id="modal-txt-inicio">Una vez que inicies no podrás pausarlo. Asegúrate de estar en un lugar tranquilo.</div>
+    <div class="modal-btns">
+      <button class="btn btn-blocked" onclick="cerrarModalInicio()" style="margin-top:0;flex:1">← Esperar</button>
+      <button class="btn" id="btn-comenzar" onclick="confirmarInicio()" style="margin-top:0;flex:1">¡Comenzar! →</button>
+    </div>
   </div>
 </div>
 
-<div class="container" id="admin-container" style="display:none;">
+<!-- PANTALLA 1: CÓDIGO -->
+<div id="s-codigo" class="screen active">
   <div class="header">
-    <div>
-      <div class="header-title">🔐 PoliSi Admin</div>
-      <div class="header-sub">Control de códigos FULL por área IPN</div>
-    </div>
-    <button class="btn btn-rojo btn-small" onclick="cerrarSesion()">🔓 Salir</button>
-  </div>
-
-  <div class="tab-nav">
-    <button class="tab-btn active" onclick="showTab('codigos', event)">🎫 Códigos</button>
-    <button class="tab-btn" onclick="showTab('usuarios', event)">👥 Usuarios</button>
-    <button class="tab-btn" onclick="showTab('resultados', event)">📊 Resultados</button>
-  </div>
-
-  <!-- CÓDIGOS -->
-  <div id="codigos" class="tab-content active">
-    <div class="card">
-      <div class="card-title">➕ Crear código FULL</div>
-      <div class="card-sub">Todos los códigos son FULL. El área define qué preguntas verá el alumno.</div>
-
-      <div class="grid-3">
-        <div>
-          <label>Código (único)</label>
-          <input type="text" id="codigo-input" placeholder="LIAM2026" oninput="this.value=this.value.toUpperCase()">
-        </div>
-        <div>
-          <label>Alumno</label>
-          <input type="text" id="alumno-input" placeholder="Nombre completo">
-        </div>
-        <div>
-          <label>Área del examen *</label>
-          <select id="area-select">
-            <option value="">Selecciona...</option>
-            <option value="iycfm">🔵 IyCFM — Ing. y Cs. Físico-Matemáticas</option>
-            <option value="cmb">🩷 CMB — Cs. Médico-Biológicas</option>
-            <option value="csya">🟡 CSyA — Cs. Sociales y Administrativas</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <div>
-          <label>Tutor / Papá / Mamá</label>
-          <input type="text" id="tutor-input" placeholder="Nombre del tutor">
-        </div>
-        <div>
-          <label>WhatsApp tutor</label>
-          <input type="tel" id="tel-input" placeholder="55 XXXX XXXX">
-        </div>
-        <div>
-          <label>Fecha de caducidad *</label>
-          <input type="date" id="fecha-input">
-          <div class="preset-btns">
-            <button class="preset-btn" onclick="setFecha(5)">+5d</button>
-            <button class="preset-btn" onclick="setFecha(15)">+15d</button>
-            <button class="preset-btn" onclick="setFecha(30)">+30d</button>
-            <button class="preset-btn" onclick="setFecha('examen')">Hasta 1 ago</button>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn btn-verde" id="btn-crear" onclick="crearCodigo()">✓ Crear código FULL</button>
-      <div id="msg-crear" class="msg" style="display:none;"></div>
-
-      <div id="codigo-generado" class="result-code" style="display:none;">
-        <div style="font-size:11px;color:var(--gray);">✅ CÓDIGO GENERADO:</div>
-        <div class="result-code-val" id="codigo-mostrado">—</div>
-        <button class="btn btn-small" onclick="copiarCodigo()">📋 Copiar</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📋 Códigos activos</div>
-      <table>
-        <thead>
-          <tr><th>Código</th><th>Alumno</th><th>Área</th><th>Estado</th><th>Expira</th><th>Acciones</th></tr>
-        </thead>
-        <tbody id="codigos-list"></tbody>
-      </table>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="logo">PS</div>
+      <div><div class="header-title">PoliSi</div><div class="header-sub">Simulador IPN Licenciatura</div></div>
     </div>
   </div>
-
-  <!-- USUARIOS -->
-  <div id="usuarios" class="tab-content">
+  <div class="content">
     <div class="card">
-      <div class="card-title">🔍 Buscar por CURP, código o nombre</div>
-      <div style="display:flex;gap:8px;">
-        <input type="text" id="curp-search" placeholder="CURP, código o nombre" oninput="this.value=this.value.toUpperCase()">
-        <button class="btn btn-small" onclick="buscarUsuario()">Buscar</button>
-      </div>
-      <div id="user-detail" style="margin-top:16px;"></div>
+      <div class="card-title">🎫 Código de acceso</div>
+      <div class="card-sub">Ingresa el código que te proporcionó tu asesor.</div>
+      <label>Tu código</label>
+      <input type="text" id="input-codigo" placeholder="XXXX0000" maxlength="12" oninput="this.value=this.value.toUpperCase()" autocomplete="off">
+      <div class="msg" id="msg-codigo"></div>
+      <button class="btn" id="btn-validar" onclick="validarCodigo()">Validar código →</button>
     </div>
   </div>
+</div>
 
-  <!-- RESULTADOS -->
-  <div id="resultados" class="tab-content">
+<!-- PANTALLA 2: REGISTRO (sin selector de área — viene del código) -->
+<div id="s-registro" class="screen">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="logo">PS</div>
+      <div><div class="header-title">PoliSi</div><div class="header-sub">Registro del aspirante</div></div>
+    </div>
+  </div>
+  <div class="content">
     <div class="card">
-      <div class="card-title">📈 Últimos resultados</div>
-      <button class="btn btn-small" onclick="cargarResultados()" style="margin-bottom:12px;">🔄 Actualizar</button>
-      <table>
-        <thead>
-          <tr><th>Fecha</th><th>Alumno</th><th>Área</th><th>Puntaje</th><th>%</th><th>Tiempo</th><th>Carrera meta</th></tr>
-        </thead>
-        <tbody id="resultados-list"></tbody>
-      </table>
+      <div class="card-title">👤 Datos del estudiante</div>
+      <div id="area-info" class="area-info">Área del examen: <strong id="area-nombre">—</strong></div>
+      <div class="card-sub">Completa todos los campos. Tu CURP debe ser único.</div>
+
+      <label>Nombre completo *</label>
+      <input type="text" id="reg-nombre" placeholder="Nombre completo">
+
+      <label>CURP (18 caracteres) *</label>
+      <input type="text" id="reg-curp" placeholder="XXXX000000HXXXXXX00" maxlength="18" oninput="this.value=this.value.toUpperCase()">
+
+      <label>Correo electrónico</label>
+      <input type="email" id="reg-correo" placeholder="estudiante@mail.com">
+
+      <label>Nombre del tutor/papá/mamá *</label>
+      <input type="text" id="reg-tutor" placeholder="Nombre completo">
+
+      <label>WhatsApp del tutor *</label>
+      <input type="tel" id="reg-tel" placeholder="55 XXXX XXXX">
+
+      <label>Carrera aspirada *</label>
+      <select id="reg-carrera">
+        <option value="">Selecciona carrera...</option>
+      </select>
+
+      <div class="msg" id="msg-registro"></div>
+      <button class="btn" onclick="mostrarModalInicio()">Comenzar examen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA 3: EXAMEN -->
+<div id="s-examen" class="screen">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="logo">PS</div>
+      <div><div class="header-title" id="hdr-nombre">Aspirante</div><div class="header-sub" id="hdr-meta">Área: —</div></div>
+    </div>
+    <div class="timer-box"><div class="timer-val" id="timer-display">3:00:00</div><div class="timer-label">tiempo</div></div>
+  </div>
+  <div style="background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 16px;">
+    <div style="max-width:660px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:6px;">
+        <span id="prog-texto">Pregunta 1 de N</span><span id="prog-resp">0 respondidas</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="preguntas-nav" id="nav-preguntas"></div>
+    <div class="card" id="card-pregunta">
+      <div class="area-badge" id="area-badge">📐 Área</div>
+      <div style="font-size:10px;color:var(--gray);text-transform:uppercase;margin-bottom:8px;">Pregunta <span id="pregunta-num">1</span></div>
+      <div style="font-size:15px;line-height:1.7;margin-bottom:20px;" id="pregunta-txt">Cargando...</div>
+      <div class="opciones" id="opciones-wrap"></div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-blocked" onclick="navPregunta(-1)" style="margin-top:0;flex:1" id="btn-anterior">← Anterior</button>
+        <button class="btn" onclick="navPregunta(1)" style="margin-top:0;flex:1" id="btn-siguiente">Siguiente →</button>
+      </div>
+    </div>
+    <button class="btn" onclick="confirmarFinalizar()" style="background:linear-gradient(135deg,#166534,#15803d);border-color:#22c55e;color:#4ade80;margin-top:0">✓ Terminar examen</button>
+  </div>
+</div>
+
+<!-- PANTALLA 4: FEEDBACK -->
+<div id="s-feedback" class="screen">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="logo">PS</div>
+      <div><div class="header-title">¡Completado!</div><div class="header-sub">Procesando...</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="card">
+      <div class="card-title">📊 Tu diagnóstico</div>
+      <div id="feedback-contenido"><div style="text-align:center;padding:40px 20px;"><div style="font-size:48px;">⏳</div><div style="margin-top:12px;font-size:13px;color:var(--gray);">Analizando...</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA 5: RESULTADOS -->
+<div id="s-resultados" class="screen">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="logo">PS</div>
+      <div><div class="header-title">Tus resultados</div><div class="header-sub">Simulador PoliSi</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="card">
+      <div class="score-big">
+        <div class="score-num" id="res-score">—</div>
+        <div class="score-total" id="res-score-total">de N aciertos</div>
+        <div style="margin-top:8px;font-size:13px;color:var(--gray);" id="res-tiempo"></div>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">💪 Fortalezas</div><div id="res-fortalezas"></div></div>
+    <div class="card"><div class="card-title">❌ Debilidades</div><div id="res-debilidades"></div></div>
+    <div class="card"><div class="card-title">📚 Plan de estudio</div><div id="res-plan"></div></div>
+    <div class="card"><div class="card-title">🎓 Carreras alcanzables</div><div id="res-carreras"></div></div>
+    <div style="text-align:center;padding:24px 0;">
+      <div style="font-weight:700;color:var(--success);margin-bottom:8px;">✅ Resultado enviado a tu asesor</div>
+      <button class="btn" onclick="volverAlInicio()" style="margin-top:12px">← Nuevo simulacro</button>
     </div>
   </div>
 </div>
 
 <script>
-// ⚠️ IMPORTANTE: Después de desplegar codigo_v6.gs en Apps Script,
-// reemplaza esta URL con la nueva URL /exec que te dé Google.
+// ⚠️ Reemplaza esta URL con la nueva del deploy v6
 const API_URL = "https://script.google.com/macros/s/AKfycbzDYmZad1uXrv9aTseA5vZ_rTzTuvD3aQwWPs5ReAjJ23CiSEd13FLC-Fz_-g96LwnX/exec";
 const API_SECRET = "PoliSi2026zova";
-const ADMIN_PIN = "260326";
 
-window.addEventListener('load', () => {
-  if (localStorage.getItem('polisiAdminPin') === ADMIN_PIN) desbloquearAdmin();
-  else document.getElementById('pin-input').focus();
-});
+// Nombres de área
+const AREA_NOMBRES = {
+  iycfm: "Ingeniería y Ciencias Físico-Matemáticas",
+  cmb:   "Ciencias Médico-Biológicas",
+  csya:  "Ciencias Sociales y Administrativas"
+};
 
-function validarPin() {
-  const pin = document.getElementById('pin-input').value;
-  const msg = document.getElementById('auth-msg');
-  if (pin === ADMIN_PIN) { localStorage.setItem('polisiAdminPin', pin); desbloquearAdmin(); }
-  else { msg.className='msg error'; msg.textContent='❌ PIN incorrecto'; msg.style.display='block'; document.getElementById('pin-input').value=''; }
-}
+// Carreras por área (lista completa basada en tu investigación)
+const CARRERAS = {
+  iycfm: [
+    {n:"Ing. Sistemas Computacionales", m:95},
+    {n:"Ing. en Inteligencia Artificial", m:100},
+    {n:"Ing. en Ciencia de Datos", m:95},
+    {n:"Ing. Mecatrónica", m:90},
+    {n:"Ing. Civil", m:82},
+    {n:"Ing. Industrial", m:85},
+    {n:"Ing. Eléctrica", m:82},
+    {n:"Ing. en Comunicaciones y Electrónica", m:85},
+    {n:"Ing. en Control y Automatización", m:85},
+    {n:"Ing. Aeronáutica", m:95},
+    {n:"Ing. en Transporte", m:75},
+    {n:"Ing. en Sistemas Automotrices", m:85},
+    {n:"Ing. Ambiental", m:78},
+    {n:"Ing. en Energía", m:82},
+    {n:"Ing. Biónica", m:90},
+    {n:"Ing. Ferroviaria", m:78},
+    {n:"Ing. Química Industrial", m:88},
+    {n:"Ing. Petrolera", m:88},
+    {n:"Ing. Matemática", m:85},
+    {n:"Lic. en Física y Matemáticas", m:80},
+    {n:"Lic. en Ciencia de Datos", m:88}
+  ],
+  cmb: [
+    {n:"Médico Cirujano y Partero", m:109},
+    {n:"Médico Cirujano Homeópata", m:100},
+    {n:"Lic. en Odontología", m:95},
+    {n:"Lic. en Enfermería", m:78},
+    {n:"Lic. en Enfermería y Obstetricia", m:78},
+    {n:"Lic. en Nutrición", m:85},
+    {n:"Lic. en Optometría", m:78},
+    {n:"Lic. en Psicología", m:82},
+    {n:"Químico Farmacéutico Industrial", m:90},
+    {n:"Químico Bacteriólogo Parasitólogo", m:88},
+    {n:"Lic. en Biología", m:82}
+  ],
+  csya: [
+    {n:"Contador Público", m:78},
+    {n:"Lic. en Economía", m:78},
+    {n:"Lic. en Administración Industrial", m:78},
+    {n:"Lic. en Administración y Desarrollo Empresarial", m:75},
+    {n:"Lic. en Negocios Internacionales", m:75},
+    {n:"Lic. en Negocios Digitales", m:75},
+    {n:"Lic. en Mercadotecnia Digital", m:75},
+    {n:"Lic. en Relaciones Comerciales", m:72},
+    {n:"Lic. en Turismo", m:68},
+    {n:"Lic. en Turismo Sustentable", m:68},
+    {n:"Lic. en Archivonomía", m:65},
+    {n:"Lic. en Biblioteconomía", m:65}
+  ]
+};
 
-function desbloquearAdmin() {
-  document.getElementById('auth-screen').style.display='none';
-  document.getElementById('admin-container').style.display='block';
-  cargarCodigos();
-}
+// BANCO DE PREGUNTAS DE MUESTRA (9 preguntas, 3 por área)
+// Cuando tengas las 180 de Gemini, reemplazas este array completo
+const PREGUNTAS_LOCAL = [
+  // IyCFM (3)
+  {id:"iycfm-mat-01", area:"iycfm", materia:"Matemáticas", subtema:"Álgebra",
+   q:"Si (x−3)(x+5)=0, ¿cuál es la suma de las raíces?",
+   o:["8","−2","15","2"], r:1,
+   exp:"Raíces: x=3 y x=−5. Suma: 3+(−5)=−2."},
+  {id:"iycfm-fis-01", area:"iycfm", materia:"Física", subtema:"Dinámica",
+   q:"Una fuerza de 12 N actúa sobre una masa de 6 kg. ¿Cuál es la aceleración?",
+   o:["2 m/s²","72 m/s²","6 m/s²","0.5 m/s²"], r:0,
+   exp:"Segunda ley de Newton: a = F/m = 12/6 = 2 m/s²."},
+  {id:"iycfm-qui-01", area:"iycfm", materia:"Química", subtema:"Estequiometría",
+   q:"¿Cuántos moles hay en 18 g de H₂O? (masa molar = 18 g/mol)",
+   o:["2","1","18","0.5"], r:1,
+   exp:"n = masa / masa molar = 18/18 = 1 mol."},
 
-function cerrarSesion() { localStorage.removeItem('polisiAdminPin'); location.reload(); }
+  // CMB (3)
+  {id:"cmb-bio-01", area:"cmb", materia:"Biología", subtema:"División celular",
+   q:"La mitosis produce como resultado:",
+   o:["2 células hijas idénticas","Gametos haploides","1 célula más grande","4 células distintas"], r:0,
+   exp:"La mitosis produce 2 células hijas genéticamente idénticas a la madre."},
+  {id:"cmb-qui-01", area:"cmb", materia:"Química", subtema:"Química orgánica",
+   q:"El grupo funcional característico de los ácidos carboxílicos es:",
+   o:["−OH","−COOH","−NH₂","−CHO"], r:1,
+   exp:"El grupo −COOH (carboxilo) define a los ácidos carboxílicos."},
+  {id:"cmb-bio-02", area:"cmb", materia:"Biología", subtema:"Genética",
+   q:"Un individuo con genotipo Aa para un gen de herencia dominante simple es:",
+   o:["Homocigoto dominante","Heterocigoto","Homocigoto recesivo","Mutante"], r:1,
+   exp:"Aa tiene dos alelos diferentes → heterocigoto."},
+
+  // CSyA (3)
+  {id:"csya-his-01", area:"csya", materia:"Historia", subtema:"México contemporáneo",
+   q:"¿En qué año inició la Revolución Mexicana?",
+   o:["1900","1910","1920","1905"], r:1,
+   exp:"La Revolución Mexicana inició el 20 de noviembre de 1910."},
+  {id:"csya-com-01", area:"csya", materia:"Competencia escrita", subtema:"Ortografía",
+   q:"¿Cuál oración está escrita correctamente?",
+   o:["Compré un libro nuebo","Compré un libro nuevo","Compre un libro nuevo","Compré un livro nuevo"], r:1,
+   exp:"'Nuevo' se escribe con v; 'compré' lleva tilde por ser aguda terminada en vocal."},
+  {id:"csya-his-02", area:"csya", materia:"Historia", subtema:"Entorno socioeconómico",
+   q:"El modelo económico que privilegia la apertura comercial y la reducción del Estado se conoce como:",
+   o:["Desarrollo estabilizador","Neoliberalismo","Socialismo","Keynesianismo"], r:1,
+   exp:"El Neoliberalismo en México inició en los 80s con apertura comercial y privatizaciones."}
+];
+
+let E = {
+  codigo:'', area:'', nombre:'', curp:'', correo:'', tutor:'', tel:'', carrera:'',
+  preguntas:[], respuestas:{}, preguntaActual:0, tiempoInicio:null, timerInterval:null, tiempoUsado:0
+};
 
 function apiCall(params) {
   return new Promise((resolve, reject) => {
-    const cbName = 'adm_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
+    const cbName = 'ps_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
     const qs = new URLSearchParams({...params, secret: API_SECRET, callback: cbName}).toString();
     const script = document.createElement('script');
     const timeout = setTimeout(() => { delete window[cbName]; if(script.parentNode) document.body.removeChild(script); reject(new Error('Timeout')); }, 15000);
@@ -221,144 +346,192 @@ function apiCall(params) {
   });
 }
 
-function showTab(tab, ev) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tab).classList.add('active');
-  if (ev && ev.target) ev.target.classList.add('active');
-  if (tab === 'codigos') cargarCodigos();
-  if (tab === 'resultados') cargarResultados();
-}
+let validando = false;
+async function validarCodigo() {
+  if (validando) return;
+  const btn = document.getElementById('btn-validar');
+  const codigo = document.getElementById('input-codigo').value.trim();
+  const msg = document.getElementById('msg-codigo');
+  if (!codigo) { mostrarMsg(msg,'error','⚠️ Ingresa tu código.'); return; }
 
-function setFecha(dias) {
-  let fecha = dias === 'examen' ? new Date('2026-08-01') : (() => { const d = new Date(); d.setDate(d.getDate() + dias); return d; })();
-  const yyyy = fecha.getFullYear(), mm = String(fecha.getMonth()+1).padStart(2,'0'), dd = String(fecha.getDate()).padStart(2,'0');
-  document.getElementById('fecha-input').value = `${yyyy}-${mm}-${dd}`;
-}
-
-let creando = false;
-async function crearCodigo() {
-  if (creando) return;
-  const btn = document.getElementById('btn-crear');
-  const msg = document.getElementById('msg-crear');
-  const codigo = document.getElementById('codigo-input').value.trim();
-  const alumno = document.getElementById('alumno-input').value.trim();
-  const area = document.getElementById('area-select').value;
-  const tutor = document.getElementById('tutor-input').value.trim();
-  const tel = document.getElementById('tel-input').value.trim();
-  const fecha = document.getElementById('fecha-input').value;
-
-  if (!codigo) return showMsg(msg,'error','⚠️ Falta el código.');
-  if (!area) return showMsg(msg,'error','⚠️ Selecciona un área.');
-  if (!fecha) return showMsg(msg,'error','⚠️ Define fecha de caducidad.');
-
-  creando = true; btn.disabled = true; btn.textContent = '⏳ Creando...';
+  validando = true; btn.disabled = true;
   try {
-    const res = await apiCall({action:'crear', codigo, alumno, area, tutor, tel_tutor:tel, expira:fecha});
+    const res = await apiCall({action:'validar', codigo});
     if (res.ok) {
-      showMsg(msg,'success',`✅ Código creado. Vigencia: ${res.dias_vigencia} días.`);
-      document.getElementById('codigo-mostrado').textContent = res.codigo;
-      document.getElementById('codigo-generado').style.display = 'block';
-      document.getElementById('codigo-input').value = '';
-      document.getElementById('alumno-input').value = '';
-      cargarCodigos();
-    } else showMsg(msg,'error','❌ '+res.error);
-  } catch(e) { showMsg(msg,'error','❌ Error. No uses Brave.'); }
-  finally { creando = false; btn.disabled = false; btn.textContent = '✓ Crear código FULL'; }
+      E.codigo = codigo;
+      E.area = res.area || 'iycfm';
+
+      // Mostrar área en pantalla de registro
+      document.getElementById('area-nombre').textContent = AREA_NOMBRES[E.area] || E.area;
+
+      // Llenar dropdown de carreras filtradas por área
+      const carreras = CARRERAS[E.area] || [];
+      const sel = document.getElementById('reg-carrera');
+      sel.innerHTML = '<option value="">Selecciona carrera...</option>' +
+        carreras.map(c => `<option value="${c.n}" data-m="${c.m}">${c.n}</option>`).join('');
+
+      let m = `✅ Código válido`;
+      if (res.dias_restantes && res.dias_restantes <= 7) m += ` ⚠️ Vence en ${res.dias_restantes} días`;
+      mostrarMsg(msg,'ok',m);
+      setTimeout(() => showScreen('s-registro'), 1200);
+    } else mostrarMsg(msg,'error','❌ ' + res.error);
+  } catch(e) { mostrarMsg(msg,'error','❌ Error de conexión. No uses Brave.'); }
+  finally { validando = false; btn.disabled = false; }
 }
 
-function copiarCodigo() {
-  const codigo = document.getElementById('codigo-mostrado').textContent;
-  navigator.clipboard.writeText(codigo);
-  alert('Copiado: ' + codigo);
+function mostrarMsg(el, tipo, txt) { el.className = `msg ${tipo} show`; el.textContent = txt; setTimeout(() => el.classList.remove('show'), 5000); }
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+
+function mostrarModalInicio() {
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const curp = document.getElementById('reg-curp').value.trim();
+  const tutor = document.getElementById('reg-tutor').value.trim();
+  const tel = document.getElementById('reg-tel').value.trim();
+  const carrera = document.getElementById('reg-carrera').value;
+  const msg = document.getElementById('msg-registro');
+
+  if (!nombre || !curp || !tutor || !tel || !carrera) { mostrarMsg(msg,'error','⚠️ Completa todos los campos obligatorios.'); return; }
+  if (curp.length !== 18) { mostrarMsg(msg,'error','⚠️ El CURP debe tener 18 caracteres.'); return; }
+
+  E.nombre = nombre;
+  E.curp = curp;
+  E.correo = document.getElementById('reg-correo').value.trim();
+  E.tutor = tutor;
+  E.tel = tel;
+  E.carrera = carrera;
+
+  // Filtrar preguntas por área
+  E.preguntas = PREGUNTAS_LOCAL.filter(p => p.area === E.area);
+
+  document.getElementById('modal-txt-inicio').textContent =
+    `Examen de ${E.preguntas.length} preguntas para ${AREA_NOMBRES[E.area]}. Sin feedback (como examen real).`;
+  document.getElementById('modal-inicio').classList.add('show');
 }
 
-async function cargarCodigos() {
+function cerrarModalInicio() { document.getElementById('modal-inicio').classList.remove('show'); }
+
+let iniciando = false;
+async function confirmarInicio() {
+  if (iniciando) return;
+  iniciando = true;
+  const btn = document.getElementById('btn-comenzar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Iniciando...';
+
+  cerrarModalInicio();
+
+  try { await apiCall({action:'registrar_usuario', curp:E.curp, nombre:E.nombre, email:E.correo, tutor:E.tutor, tel_tutor:E.tel, area:E.area, carrera:E.carrera}); } catch(e){}
+  try { await apiCall({action:'usar', codigo:E.codigo}); } catch(e){}
+
+  E.tiempoInicio = new Date();
+  document.getElementById('hdr-nombre').textContent = E.nombre.split(' ')[0];
+  document.getElementById('hdr-meta').textContent = `Área: ${E.area.toUpperCase()} · ${E.carrera}`;
+
+  showScreen('s-examen');
+  renderNav();
+  mostrarPregunta(0);
+  iniciarTimer();
+
+  iniciando = false;
+  btn.disabled = false;
+  btn.textContent = '¡Comenzar! →';
+}
+
+function iniciarTimer() {
+  const dur = 10800; // 3 horas
+  let seg = dur;
+  E.timerInterval = setInterval(() => {
+    seg--; E.tiempoUsado = dur - seg;
+    const h = Math.floor(seg/3600), m = Math.floor((seg%3600)/60), s = seg%60;
+    document.getElementById('timer-display').textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if (seg <= 0) { clearInterval(E.timerInterval); confirmarFinalizar(); }
+  }, 1000);
+}
+
+function renderNav() {
+  const wrap = document.getElementById('nav-preguntas'); wrap.innerHTML = '';
+  E.preguntas.forEach((p,i) => {
+    const btn = document.createElement('div');
+    btn.className = 'nav-q' + (i===0?' actual':'') + (E.respuestas[i]!==undefined?' respondida':'');
+    btn.textContent = i+1;
+    btn.onclick = () => mostrarPregunta(i);
+    wrap.appendChild(btn);
+  });
+}
+
+function mostrarPregunta(idx) {
+  if (idx < 0 || idx >= E.preguntas.length) return;
+  E.preguntaActual = idx; const p = E.preguntas[idx];
+  document.querySelectorAll('.nav-q').forEach((el,i) => el.classList.toggle('actual', i===idx));
+  document.getElementById('area-badge').textContent = `${E.area.toUpperCase()} · ${p.materia}`;
+  document.getElementById('pregunta-num').textContent = idx+1;
+  document.getElementById('pregunta-txt').textContent = p.q;
+  const resp = Object.keys(E.respuestas).length;
+  document.getElementById('prog-texto').textContent = `Pregunta ${idx+1} de ${E.preguntas.length}`;
+  document.getElementById('prog-resp').textContent = `${resp} respondidas`;
+  document.getElementById('prog-fill').style.width = `${(resp/E.preguntas.length)*100}%`;
+  const letras = ['A','B','C','D']; const wrapOps = document.getElementById('opciones-wrap'); wrapOps.innerHTML = '';
+  p.o.forEach((opt,oi) => {
+    const div = document.createElement('div');
+    div.className = 'opcion' + (E.respuestas[idx]===oi?' selected':'');
+    div.innerHTML = `<div class="opcion-letra">${letras[oi]}</div><div>${opt}</div>`;
+    div.onclick = () => selResp(idx, oi);
+    wrapOps.appendChild(div);
+  });
+  document.getElementById('btn-anterior').disabled = idx === 0;
+}
+
+function selResp(idx, oi) {
+  E.respuestas[idx] = oi;
+  document.querySelectorAll('.opcion').forEach((el,i) => el.classList.toggle('selected', i===oi));
+  document.querySelectorAll('.nav-q')[idx].classList.add('respondida');
+  const resp = Object.keys(E.respuestas).length;
+  document.getElementById('prog-resp').textContent = `${resp} respondidas`;
+  document.getElementById('prog-fill').style.width = `${(resp/E.preguntas.length)*100}%`;
+  setTimeout(() => { if (idx < E.preguntas.length - 1) mostrarPregunta(idx + 1); }, 400);
+}
+
+function navPregunta(dir) { mostrarPregunta(E.preguntaActual + dir); }
+function confirmarFinalizar() { if (confirm('¿Finalizar el examen?')) { clearInterval(E.timerInterval); procesarResultados(); } }
+
+async function procesarResultados() {
+  showScreen('s-feedback');
+  const porMat = {}; let total = 0;
+  E.preguntas.forEach((p,i) => {
+    if (!porMat[p.materia]) porMat[p.materia] = {correctas:0, total:0};
+    porMat[p.materia].total++;
+    if (E.respuestas[i] === p.r) { porMat[p.materia].correctas++; total++; }
+  });
+  const debiles = Object.entries(porMat).filter(([n,a]) => a.correctas/a.total < 0.6).map(([n]) => n);
+  const fuertes = Object.entries(porMat).filter(([n,a]) => a.correctas/a.total >= 0.7).map(([n]) => n);
+  const plan = debiles.length > 0 ? debiles.map(t => `${t} (refuerzo 3-5 días)`).join(', ') : 'Mantén tu nivel';
+  const carreras = CARRERAS[E.area] || [];
+  const alcanzables = carreras.filter(c => total >= Math.round(c.m * E.preguntas.length / 140));
+
   try {
-    const res = await apiCall({action:'listar'});
-    const tbody = document.getElementById('codigos-list');
-    if (!res.ok || !res.codigos.length) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px;">Sin códigos</td></tr>'; return; }
-    tbody.innerHTML = res.codigos.map(c => `
-      <tr>
-        <td><strong>${c.codigo}</strong></td>
-        <td>${c.alumno || '—'}</td>
-        <td><span class="badge badge-${c.area || 'iycfm'}">${(c.area || '—').toUpperCase()}</span></td>
-        <td><span class="badge badge-${c.estado}">${c.estado}</span></td>
-        <td>${new Date(c.expira).toLocaleDateString('es-MX')}</td>
-        <td>
-          <button class="btn btn-small btn-rojo" onclick="borrarCodigo('${c.codigo}')">🗑</button>
-          <button class="btn btn-small" onclick="toggleCodigo('${c.codigo}','${c.estado}')">${c.estado==='activo'?'🔒':'🔓'}</button>
-        </td>
-      </tr>`).join('');
+    await apiCall({action:'guardar_resultado', codigo:E.codigo, alumno:E.nombre, area:E.area, modo:'full',
+      puntaje:total, tiempo_seg:E.tiempoUsado, areas:JSON.stringify(porMat),
+      carrera_meta:E.carrera, corte:alcanzables.length>0?alcanzables[0].m:0,
+      plan_estudio:JSON.stringify({fuertes,debiles,plan}), total_preguntas:E.preguntas.length});
   } catch(e){}
+
+  await new Promise(r => setTimeout(r, 1000));
+  setTimeout(() => {
+    showScreen('s-resultados');
+    document.getElementById('res-score').textContent = total;
+    document.getElementById('res-score-total').textContent = `de ${E.preguntas.length} aciertos`;
+    const mins = Math.floor(E.tiempoUsado/60), secs = E.tiempoUsado%60;
+    document.getElementById('res-tiempo').textContent = `⏱ Tiempo: ${mins} min ${secs} seg`;
+    document.getElementById('res-fortalezas').innerHTML = fuertes.length===0 ? '<div class="result-desc">Necesitas reforzar todas las materias.</div>' : fuertes.map(t => `<div class="result-section fuerte"><div class="result-title">✅ ${t}</div></div>`).join('');
+    document.getElementById('res-debilidades').innerHTML = debiles.length===0 ? '<div class="result-desc">¡Excelente! Sin debilidades claras.</div>' : debiles.map(t => `<div class="result-section"><div class="result-title">❌ ${t}</div></div>`).join('');
+    document.getElementById('res-plan').innerHTML = `<div class="result-desc">${plan}</div>`;
+    document.getElementById('res-carreras').innerHTML = alcanzables.length===0 ? `<div class="result-desc">Con ${total} aciertos necesitas más preparación.</div>` : alcanzables.map(c => `<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;">${c.n} <span style="color:var(--gray);">(${c.m} pts)</span></div>`).join('');
+  }, 500);
 }
 
-async function borrarCodigo(codigo) {
-  if (!confirm(`¿Borrar ${codigo}?`)) return;
-  await apiCall({action:'borrar', codigo});
-  cargarCodigos();
-}
-
-async function toggleCodigo(codigo, estadoActual) {
-  const nuevo = estadoActual === 'activo' ? 'bloqueado' : 'activo';
-  await apiCall({action:'toggle', codigo, estado: nuevo});
-  cargarCodigos();
-}
-
-async function buscarUsuario() {
-  const q = document.getElementById('curp-search').value.trim();
-  const out = document.getElementById('user-detail');
-  if (!q) { out.innerHTML='<div class="msg info">Ingresa un CURP, código o nombre.</div>'; return; }
-  try {
-    const res = await apiCall({action:'listar_resultados'});
-    if (!res.ok) { out.innerHTML='<div class="msg error">Error.</div>'; return; }
-    const f = res.resultados.filter(r =>
-      (r.codigo && r.codigo.toUpperCase()===q) ||
-      (r.alumno && r.alumno.toUpperCase().includes(q))
-    );
-    if (!f.length) { out.innerHTML='<div class="msg info">Sin registros.</div>'; return; }
-    out.innerHTML = `
-      <div class="msg success">${f.length} registro(s) encontrado(s).</div>
-      <table style="margin-top:12px;">
-        <thead><tr><th>Fecha</th><th>Alumno</th><th>Área</th><th>Puntaje</th><th>%</th></tr></thead>
-        <tbody>${f.map(r => `
-          <tr>
-            <td>${r.fecha_legible || new Date(r.fecha).toLocaleString('es-MX')}</td>
-            <td>${r.alumno}</td>
-            <td><span class="badge badge-${r.area || 'iycfm'}">${(r.area || '—').toUpperCase()}</span></td>
-            <td><strong>${r.puntaje}</strong>/${r.total_preguntas || 140}</td>
-            <td>${r.porcentaje || Math.round(r.puntaje/(r.total_preguntas||140)*100)}%</td>
-          </tr>`).join('')}</tbody>
-      </table>`;
-  } catch(e){ out.innerHTML='<div class="msg error">Conexión.</div>'; }
-}
-
-async function cargarResultados() {
-  try {
-    const res = await apiCall({action:'listar_resultados'});
-    const tbody = document.getElementById('resultados-list');
-    if (!res.ok || !res.resultados.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:20px;">Sin resultados</td></tr>'; return; }
-    tbody.innerHTML = res.resultados.slice(-30).reverse().map(r => {
-      const pct = r.porcentaje || Math.round(r.puntaje/(r.total_preguntas||140)*100);
-      const color = pct>=75 ? '#4ade80' : pct>=50 ? '#fcd34d' : '#f87171';
-      return `<tr>
-        <td style="font-size:11px;">${r.fecha_legible || new Date(r.fecha).toLocaleString('es-MX')}</td>
-        <td><strong>${r.alumno}</strong></td>
-        <td><span class="badge badge-${r.area || 'iycfm'}">${(r.area || '—').toUpperCase()}</span></td>
-        <td><strong>${r.puntaje}</strong>/${r.total_preguntas || 140}</td>
-        <td style="color:${color};font-weight:700;">${pct}%</td>
-        <td>${Math.round(r.tiempo_seg/60)} min</td>
-        <td style="font-size:11px;">${r.carrera_meta || '—'}</td>
-      </tr>`;
-    }).join('');
-  } catch(e){}
-}
-
-function showMsg(el, tipo, txt) {
-  el.className = `msg ${tipo}`;
-  el.textContent = txt;
-  el.style.display = 'block';
-  setTimeout(() => el.style.display='none', 5000);
+function volverAlInicio() {
+  E = {codigo:'',area:'',nombre:'',curp:'',correo:'',tutor:'',tel:'',carrera:'',preguntas:[],respuestas:{},preguntaActual:0,tiempoInicio:null,timerInterval:null,tiempoUsado:0};
+  showScreen('s-codigo');
 }
 </script>
 </body>
