@@ -3,404 +3,363 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PoliSi — Simulador IPN Licenciatura</title>
+<title>PoliSi Admin — Control de códigos</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ========================================================================
-   COLORES IPN: Guinda (#722F37) + Blanco
-   ======================================================================== */
 :root{
-  --primary:#8B2252;
-  --secondary:#722F37;
-  --success:#22C55E;
-  --danger:#EF4444;
-  --warning:#F59E0B;
-  --bg:#120810;
-  --bg2:#1a1015;
-  --bg3:#241620;
-  --text:#f0e8ec;
-  --gray:#9a8892;
-  --border:#3a1e2d;
-  --accent:#ffffff;
-  --accent-soft:#e8d0d8;
+  --primary:#8B2252; --secondary:#722F37;
+  --success:#22C55E; --danger:#EF4444; --warning:#F59E0B;
+  --bg:#120810; --bg2:#1a1015; --bg3:#241620;
+  --text:#f0e8ec; --gray:#9a8892; --border:#3a1e2d;
+  --accent:#ffffff; --accent-soft:#e8d0d8;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Outfit',system-ui;min-height:100vh;overflow-x:hidden;}
-.screen{display:none;min-height:100vh;flex-direction:column;}
-.screen.active{display:flex;}
-.header{background:linear-gradient(135deg,#1a0810,#722F37,#1a0810);border-bottom:2px solid var(--accent);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.logo{width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;color:#722F37;flex-shrink:0;}
-.header-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#fff;}
-.header-sub{font-size:10px;color:var(--gray);}
-.content{flex:1;max-width:680px;width:100%;margin:0 auto;padding:24px 16px;}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
-.card-title{font-family:'Outfit',sans-serif;font-size:17px;font-weight:800;color:var(--accent-soft);margin-bottom:6px;}
-.card-sub{font-size:12px;color:var(--gray);margin-bottom:20px;line-height:1.6;}
-label{display:block;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:14px;}
-input,select,textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',monospace;font-size:14px;padding:11px 14px;outline:none;transition:border 0.2s;-webkit-appearance:none;}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);}
-input::placeholder{color:var(--gray);}
-.btn{width:100%;background:linear-gradient(135deg,var(--primary),#5a1a2e);border:1px solid var(--accent);color:var(--accent);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:10px;cursor:pointer;letter-spacing:0.5px;text-transform:uppercase;transition:all 0.2s;margin-top:20px;display:block;}
-.btn:hover:not(:disabled){box-shadow:0 4px 20px rgba(114,47,55,0.4);transform:translateY(-1px);}
-.btn:disabled{opacity:0.4;cursor:not-allowed;}
-.btn-blocked{background:linear-gradient(135deg,#4B5563,#333);border-color:#666;color:#999;cursor:not-allowed;}
-.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-top:12px;display:none;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',system-ui;min-height:100vh;padding:20px;}
+.container{max-width:1200px;margin:0 auto;}
+.header{background:linear-gradient(135deg,#1a0810,#722F37,#1a0810);border-bottom:2px solid var(--accent);padding:20px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center;}
+.header-title{font-size:22px;font-weight:800;color:#fff;}
+.header-sub{font-size:12px;color:var(--gray);margin-top:4px;}
+.tab-nav{display:flex;gap:4px;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;}
+.tab-btn{padding:14px 20px;background:transparent;border:none;color:var(--gray);font-family:'Outfit';font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-content{display:none;padding:24px;background:var(--bg2);border-radius:0 0 12px 12px;}
+.tab-content.active{display:block;}
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;}
+.card-title{font-size:16px;font-weight:800;color:var(--accent-soft);margin-bottom:12px;}
+.card-sub{font-size:12px;color:var(--gray);margin-bottom:16px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+label{display:block;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+input,select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit';font-size:14px;padding:10px 12px;outline:none;}
+input:focus,select:focus{border-color:var(--accent);}
+.btn{background:linear-gradient(135deg,var(--primary),#5a1a2e);border:1px solid var(--accent);color:var(--accent);font-family:'Outfit';font-weight:700;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-verde{background:linear-gradient(135deg,#166534,#15803d);border-color:#22c55e;color:#4ade80;}
+.btn-rojo{background:linear-gradient(135deg,#991b1b,#7f1d1d);border-color:#ef4444;color:#fca5a5;}
+.btn-small{padding:6px 12px;font-size:11px;}
+.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-top:12px;}
 .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;}
-.msg.ok{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#4ade80;}
+.msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#4ade80;}
 .msg.info{background:rgba(139,34,82,0.15);border:1px solid rgba(139,34,82,0.3);color:var(--accent-soft);}
-.msg.show{display:block;}
-.timer-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;text-align:center;min-width:90px;}
-.timer-val{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--success);letter-spacing:1px;transition:color 0.5s;}
-.timer-label{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}
-.modal-overlay{position:fixed;inset:0;background:rgba(18,8,16,0.95);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
-.modal-overlay.show{display:flex;}
-.modal-box{background:var(--bg2);border:2px solid var(--accent);border-radius:20px;padding:28px;max-width:400px;width:100%;}
-.modal-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--accent-soft);margin-bottom:12px;}
-.modal-txt{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
-.modal-btns{display:flex;gap:10px;}
-.modal-btns .btn{margin-top:0;flex:1;}
-.progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:10px;}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width 0.3s;}
-.area-badge{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--accent-soft);margin-bottom:16px;font-weight:600;}
-.preguntas-nav{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:16px;justify-content:center;}
-.nav-q{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--gray);font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
-.nav-q.respondida{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.4);color:#4ade80;}
-.nav-q.actual{border-color:var(--accent);color:var(--accent);background:rgba(114,47,55,0.15);}
-.opciones{display:flex;flex-direction:column;gap:8px;}
-.opcion{background:var(--bg3);border:2px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:12px;font-size:13px;line-height:1.5;}
-.opcion:hover{border-color:rgba(255,255,255,0.4);background:rgba(114,47,55,0.08);}
-.opcion.selected{border-color:var(--accent);background:rgba(114,47,55,0.15);}
-.opcion-letra{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--gray);}
-.opcion.selected .opcion-letra{border-color:var(--accent);color:var(--accent);}
-.score-big{text-align:center;padding:24px 0;}
-.score-num{font-family:'Outfit',sans-serif;font-size:64px;font-weight:800;color:var(--accent);text-shadow:0 0 30px rgba(114,47,55,0.5);line-height:1;}
-.score-total{font-size:18px;color:var(--gray);margin-top:4px;}
-.result-section{background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:12px;border-left:3px solid var(--danger);}
-.result-section.debil{border-left-color:var(--danger);}
-.result-section.fuerte{border-left-color:var(--success);}
-.result-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
-.result-desc{font-size:11px;color:var(--gray);line-height:1.5;}
-@media(max-width:480px){.score-num{font-size:48px;}label{font-size:9px;}}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:10px;color:var(--gray);font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border);}
+td{padding:10px;border-bottom:1px solid var(--border);}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;}
+.badge-activo{background:rgba(34,197,94,0.2);color:#4ade80;}
+.badge-bloqueado{background:rgba(239,68,68,0.2);color:#f87171;}
+.badge-iycfm{background:rgba(59,130,246,0.2);color:#93c5fd;}
+.badge-cmb{background:rgba(236,72,153,0.2);color:#f9a8d4;}
+.badge-csya{background:rgba(245,158,11,0.2);color:#fcd34d;}
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+.auth-box{background:var(--bg2);border:2px solid var(--accent);border-radius:16px;padding:30px;max-width:360px;width:100%;text-align:center;}
+.preset-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.preset-btn{padding:6px 12px;background:var(--bg2);border:1px solid var(--border);color:var(--gray);border-radius:6px;cursor:pointer;font-size:11px;}
+.preset-btn:hover{border-color:var(--accent);color:var(--accent);}
+.result-code{background:rgba(34,197,94,0.1);border-left:3px solid #22c55e;padding:14px;border-radius:8px;margin-top:14px;}
+.result-code-val{font-family:'Courier New',monospace;font-size:20px;font-weight:800;color:#4ade80;letter-spacing:2px;margin:6px 0;}
 </style>
 </head>
 <body>
 
-<div class="modal-overlay" id="modal-bloqueado">
-  <div class="modal-box">
-    <div class="modal-title">🔒 Modo bloqueado</div>
-    <div class="modal-txt">Este modo requiere un código de acceso <strong>FULL</strong> o <strong>PRÁCTICA</strong>.<br><br>Tu código actual es de tipo <strong id="tipo-actual">DEMO</strong>.<br><br>Contacta a tu asesor para obtener acceso a más simulacros.</div>
-    <div class="modal-btns"><button class="btn" onclick="cerrarModalBloqueado()" style="margin-top:0;flex:1">Entendido</button></div>
+<div id="auth-screen">
+  <div class="auth-box">
+    <div style="font-size:40px;margin-bottom:10px;">🔐</div>
+    <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">PoliSi Admin</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:20px;">Ingresa el PIN</div>
+    <input type="password" id="pin-input" placeholder="PIN" style="text-align:center;letter-spacing:3px;font-size:16px;margin-bottom:12px;" onkeypress="if(event.key==='Enter')validarPin()">
+    <button class="btn" onclick="validarPin()" style="width:100%;">Acceder →</button>
+    <div id="auth-msg" class="msg" style="display:none;margin-top:12px;"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-inicio">
-  <div class="modal-box">
-    <div class="modal-title">⚠️ ¿Listo?</div>
-    <div class="modal-txt" id="modal-txt-inicio">Una vez que inicies no podrás pausarlo. Asegúrate de estar en un lugar tranquilo.</div>
-    <div class="modal-btns">
-      <button class="btn btn-blocked" onclick="cerrarModalInicio()" style="margin-top:0;flex:1">← Esperar</button>
-      <button class="btn" onclick="confirmarInicio()" style="margin-top:0;flex:1">¡Comenzar! →</button>
-    </div>
-  </div>
-</div>
-
-<!-- PANTALLA 1: CÓDIGO -->
-<div id="s-codigo" class="screen active">
+<div class="container" id="admin-container" style="display:none;">
   <div class="header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div class="logo">PS</div>
-      <div><div class="header-title">PoliSi</div><div class="header-sub">Simulador IPN Licenciatura</div></div>
+    <div>
+      <div class="header-title">🔐 PoliSi Admin</div>
+      <div class="header-sub">Control de códigos FULL por área IPN</div>
     </div>
+    <button class="btn btn-rojo btn-small" onclick="cerrarSesion()">🔓 Salir</button>
   </div>
-  <div class="content">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('codigos', event)">🎫 Códigos</button>
+    <button class="tab-btn" onclick="showTab('usuarios', event)">👥 Usuarios</button>
+    <button class="tab-btn" onclick="showTab('resultados', event)">📊 Resultados</button>
+  </div>
+
+  <!-- CÓDIGOS -->
+  <div id="codigos" class="tab-content active">
     <div class="card">
-      <div class="card-title">🎫 Código de acceso</div>
-      <div class="card-sub">Ingresa el código que te proporcionó tu asesor para acceder a los simulacros.</div>
-      <label>Tu código</label>
-      <input type="text" id="input-codigo" placeholder="XXXX0000" maxlength="12" oninput="this.value=this.value.toUpperCase()" autocomplete="off" spellcheck="false">
-      <div class="msg" id="msg-codigo"></div>
-      <button class="btn" onclick="validarCodigo()">Validar código →</button>
-    </div>
-  </div>
-</div>
+      <div class="card-title">➕ Crear código FULL</div>
+      <div class="card-sub">Todos los códigos son FULL. El área define qué preguntas verá el alumno.</div>
 
-<!-- PANTALLA 2: REGISTRO -->
-<div id="s-registro" class="screen">
-  <div class="header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div class="logo">PS</div>
-      <div><div class="header-title">PoliSi</div><div class="header-sub">Registro del aspirante</div></div>
-    </div>
-  </div>
-  <div class="content">
-    <div class="card">
-      <div class="card-title">👤 Datos del estudiante</div>
-      <div class="card-sub">Completa todos los campos. Tu CURP debe ser único para registros posteriores.</div>
-      <label>Nombre completo *</label>
-      <input type="text" id="reg-nombre" placeholder="Nombre completo">
-      <label>CURP (18 caracteres) *</label>
-      <input type="text" id="reg-curp" placeholder="XXXX000000HXXXXXX00" maxlength="18" oninput="this.value=this.value.toUpperCase()">
-      <label>Correo electrónico</label>
-      <input type="email" id="reg-correo" placeholder="estudiante@mail.com">
-      <label>Nombre del tutor/papá/mamá *</label>
-      <input type="text" id="reg-tutor" placeholder="Nombre completo">
-      <label>WhatsApp del tutor *</label>
-      <input type="tel" id="reg-tel" placeholder="55 XXXX XXXX">
-      <label>¿Cuál es tu área de interés? *</label>
-      <select id="reg-area">
-        <option value="">Selecciona...</option>
-        <option value="IyCFM">Ingeniería y Ciencias Físico Matemáticas</option>
-        <option value="CMB">Ciencias Médico Biológicas</option>
-        <option value="CSyA">Ciencias Sociales y Administrativas</option>
-      </select>
-      <label>Carrera aspirada *</label>
-      <select id="reg-carrera"><option value="">Selecciona tu área primero</option></select>
-      <div class="msg" id="msg-registro"></div>
-      <button class="btn" onclick="mostrarModalInicio()">Comenzar examen →</button>
-    </div>
-  </div>
-</div>
-
-<!-- PANTALLA 3: EXAMEN -->
-<div id="s-examen" class="screen">
-  <div class="header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div class="logo">PS</div>
-      <div><div class="header-title" id="hdr-nombre">Aspirante</div><div class="header-sub" id="hdr-meta">Meta: —</div></div>
-    </div>
-    <div class="timer-box"><div class="timer-val" id="timer-display">3:00:00</div><div class="timer-label">tiempo</div></div>
-  </div>
-  <div style="background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 16px;">
-    <div style="max-width:660px;margin:0 auto;">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:6px;">
-        <span id="prog-texto">Pregunta 1 de 140</span><span id="prog-resp">0 respondidas</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-    </div>
-  </div>
-  <div class="content">
-    <div class="preguntas-nav" id="nav-preguntas"></div>
-    <div class="card" id="card-pregunta">
-      <div class="area-badge" id="area-badge">📐 Área</div>
-      <div style="font-size:10px;color:var(--gray);text-transform:uppercase;margin-bottom:8px;">Pregunta <span id="pregunta-num">1</span></div>
-      <div style="font-size:15px;line-height:1.7;margin-bottom:20px;color:var(--text);" id="pregunta-txt">Cargando...</div>
-      <div class="opciones" id="opciones-wrap"></div>
-      <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="btn btn-blocked" onclick="navPregunta(-1)" style="margin-top:0;flex:1" id="btn-anterior">← Anterior</button>
-        <button class="btn" onclick="navPregunta(1)" style="margin-top:0;flex:1" id="btn-siguiente">Siguiente →</button>
-      </div>
-    </div>
-    <button class="btn" onclick="confirmarFinalizar()" style="background:linear-gradient(135deg,#166534,#15803d);border-color:#22c55e;color:#4ade80;margin-top:0">✓ Terminar examen</button>
-  </div>
-</div>
-
-<!-- PANTALLA 4: FEEDBACK -->
-<div id="s-feedback" class="screen">
-  <div class="header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div class="logo">PS</div>
-      <div><div class="header-title">¡Completado!</div><div class="header-sub">Procesando resultados...</div></div>
-    </div>
-  </div>
-  <div class="content">
-    <div class="card">
-      <div class="card-title">📊 Tu diagnóstico</div>
-      <div id="feedback-contenido">
-        <div style="text-align:center;padding:40px 20px;">
-          <div style="font-size:48px;animation:spin 2s linear infinite;">⏳</div>
-          <div style="margin-top:12px;font-size:13px;color:var(--gray);">Analizando tu desempeño...</div>
+      <div class="grid-3">
+        <div>
+          <label>Código (único)</label>
+          <input type="text" id="codigo-input" placeholder="LIAM2026" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div>
+          <label>Alumno</label>
+          <input type="text" id="alumno-input" placeholder="Nombre completo">
+        </div>
+        <div>
+          <label>Área del examen *</label>
+          <select id="area-select">
+            <option value="">Selecciona...</option>
+            <option value="iycfm">🔵 IyCFM — Ing. y Cs. Físico-Matemáticas</option>
+            <option value="cmb">🩷 CMB — Cs. Médico-Biológicas</option>
+            <option value="csya">🟡 CSyA — Cs. Sociales y Administrativas</option>
+          </select>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- PANTALLA 5: RESULTADOS -->
-<div id="s-resultados" class="screen">
-  <div class="header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div class="logo">PS</div>
-      <div><div class="header-title">Tus resultados</div><div class="header-sub" id="res-sub">Simulador PoliSi</div></div>
-    </div>
-  </div>
-  <div class="content">
-    <div class="card">
-      <div class="score-big">
-        <div class="score-num" id="res-score">—</div>
-        <div class="score-total" id="res-score-total">de 140 aciertos</div>
-        <div style="margin-top:8px;font-size:13px;color:var(--gray);" id="res-tiempo"></div>
+      <div class="grid-3">
+        <div>
+          <label>Tutor / Papá / Mamá</label>
+          <input type="text" id="tutor-input" placeholder="Nombre del tutor">
+        </div>
+        <div>
+          <label>WhatsApp tutor</label>
+          <input type="tel" id="tel-input" placeholder="55 XXXX XXXX">
+        </div>
+        <div>
+          <label>Fecha de caducidad *</label>
+          <input type="date" id="fecha-input">
+          <div class="preset-btns">
+            <button class="preset-btn" onclick="setFecha(5)">+5d</button>
+            <button class="preset-btn" onclick="setFecha(15)">+15d</button>
+            <button class="preset-btn" onclick="setFecha(30)">+30d</button>
+            <button class="preset-btn" onclick="setFecha('examen')">Hasta 1 ago</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-verde" id="btn-crear" onclick="crearCodigo()">✓ Crear código FULL</button>
+      <div id="msg-crear" class="msg" style="display:none;"></div>
+
+      <div id="codigo-generado" class="result-code" style="display:none;">
+        <div style="font-size:11px;color:var(--gray);">✅ CÓDIGO GENERADO:</div>
+        <div class="result-code-val" id="codigo-mostrado">—</div>
+        <button class="btn btn-small" onclick="copiarCodigo()">📋 Copiar</button>
       </div>
     </div>
-    <div class="card"><div class="card-title">💪 Fortalezas</div><div id="res-fortalezas"></div></div>
-    <div class="card"><div class="card-title">❌ Debilidades</div><div id="res-debilidades"></div></div>
-    <div class="card"><div class="card-title">📚 Plan de estudio</div><div id="res-plan"></div></div>
-    <div class="card"><div class="card-title">🎓 Carreras alcanzables</div><div id="res-carreras"></div></div>
-    <div style="text-align:center;padding:24px 0;">
-      <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--success);margin-bottom:8px;">✅ Resultado enviado a tu asesor</div>
-      <button class="btn" onclick="volverAlInicio()" style="margin-top:12px">← Nuevo simulacro</button>
+
+    <div class="card">
+      <div class="card-title">📋 Códigos activos</div>
+      <table>
+        <thead>
+          <tr><th>Código</th><th>Alumno</th><th>Área</th><th>Estado</th><th>Expira</th><th>Acciones</th></tr>
+        </thead>
+        <tbody id="codigos-list"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- USUARIOS -->
+  <div id="usuarios" class="tab-content">
+    <div class="card">
+      <div class="card-title">🔍 Buscar por CURP, código o nombre</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="curp-search" placeholder="CURP, código o nombre" oninput="this.value=this.value.toUpperCase()">
+        <button class="btn btn-small" onclick="buscarUsuario()">Buscar</button>
+      </div>
+      <div id="user-detail" style="margin-top:16px;"></div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="resultados" class="tab-content">
+    <div class="card">
+      <div class="card-title">📈 Últimos resultados</div>
+      <button class="btn btn-small" onclick="cargarResultados()" style="margin-bottom:12px;">🔄 Actualizar</button>
+      <table>
+        <thead>
+          <tr><th>Fecha</th><th>Alumno</th><th>Área</th><th>Puntaje</th><th>%</th><th>Tiempo</th><th>Carrera meta</th></tr>
+        </thead>
+        <tbody id="resultados-list"></tbody>
+      </table>
     </div>
   </div>
 </div>
 
 <script>
+// ⚠️ IMPORTANTE: Después de desplegar codigo_v6.gs en Apps Script,
+// reemplaza esta URL con la nueva URL /exec que te dé Google.
 const API_URL = "https://script.google.com/macros/s/AKfycbzDYmZad1uXrv9aTseA5vZ_rTzTuvD3aQwWPs5ReAjJ23CiSEd13FLC-Fz_-g96LwnX/exec";
 const API_SECRET = "PoliSi2026zova";
+const ADMIN_PIN = "260326";
 
-const PREGUNTAS = [
-  {id:"M01",q:"Si (x−3)(x+5)=0, ¿suma de raíces?",o:["8","−2","15","2"],r:1,s:"Álgebra",a:"IyCFM",suj:"Matemáticas"},
-  {id:"M02",q:"Factoriza x²−9",o:["(x−3)²","(x+3)²","(x−3)(x+3)","(x−9)(x+1)"],r:2,s:"Álgebra",a:"IyCFM",suj:"Matemáticas"},
-  {id:"Q01",q:"Moles en 18g H₂O:",o:["2","1","18","0.5"],r:1,s:"Estequiometría",a:"IyCFM",suj:"Química"},
-  {id:"B01",q:"Mitosis produce:",o:["2 idénticas","Gametos","1 grande","4 diferentes"],r:0,s:"Célula",a:"CMB",suj:"Biología"},
-  {id:"F01",q:"F=12N m=6kg. a=",o:["2 m/s²","72 m/s²","6 m/s²","0.5 m/s²"],r:0,s:"Dinámica",a:"IyCFM",suj:"Física"},
-  {id:"C01",q:"Error: 'libro nuebo'",o:["nuebo→nuevo","Correcta","compré→compre","Ayer→Aller"],r:0,s:"Ortografía",a:"CSyA",suj:"Comunicación"},
-  {id:"H01",q:"Revolución Mexicana:",o:["1900","1910","1920","1905"],r:1,s:"Historia",a:"CSyA",suj:"Historia"},
-];
+window.addEventListener('load', () => {
+  if (localStorage.getItem('polisiAdminPin') === ADMIN_PIN) desbloquearAdmin();
+  else document.getElementById('pin-input').focus();
+});
 
-const CARRERAS = {
-  IyCFM:[{n:"Ing. Sistemas Computacionales",m:95},{n:"Ing. Biomédica",m:100},{n:"Ing. Civil",m:82}],
-  CMB:[{n:"Médico Cirujano y Partero",m:109},{n:"Ing. en Alimentos",m:76}],
-  CSyA:[{n:"Lic. Contaduría Pública",m:78},{n:"Lic. Negocios Internacionales",m:75},{n:"Lic. Turismo",m:68}]
-};
+function validarPin() {
+  const pin = document.getElementById('pin-input').value;
+  const msg = document.getElementById('auth-msg');
+  if (pin === ADMIN_PIN) { localStorage.setItem('polisiAdminPin', pin); desbloquearAdmin(); }
+  else { msg.className='msg error'; msg.textContent='❌ PIN incorrecto'; msg.style.display='block'; document.getElementById('pin-input').value=''; }
+}
 
-let E={codigo:'',tipoAcceso:'',nombre:'',curp:'',correo:'',tutor:'',tel:'',area:'',carrera:'',modo:null,respuestas:{},preguntaActual:0,tiempoInicio:null,timerInterval:null,tiempoUsado:0};
+function desbloquearAdmin() {
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('admin-container').style.display='block';
+  cargarCodigos();
+}
 
-function apiCall(params){
-  return new Promise((resolve,reject)=>{
-    const cbName='ps_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
-    const qs=new URLSearchParams({...params,secret:API_SECRET,callback:cbName}).toString();
-    const script=document.createElement('script');
-    const timeout=setTimeout(()=>{delete window[cbName];if(script.parentNode)document.body.removeChild(script);reject(new Error('Tiempo agotado'));},15000);
-    window[cbName]=(data)=>{clearTimeout(timeout);delete window[cbName];if(script.parentNode)document.body.removeChild(script);resolve(data);};
-    script.src=`${API_URL}?${qs}`;
-    script.onerror=()=>{clearTimeout(timeout);delete window[cbName];reject(new Error('Error de conexión'));};
+function cerrarSesion() { localStorage.removeItem('polisiAdminPin'); location.reload(); }
+
+function apiCall(params) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'adm_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
+    const qs = new URLSearchParams({...params, secret: API_SECRET, callback: cbName}).toString();
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => { delete window[cbName]; if(script.parentNode) document.body.removeChild(script); reject(new Error('Timeout')); }, 15000);
+    window[cbName] = (data) => { clearTimeout(timeout); delete window[cbName]; if(script.parentNode) document.body.removeChild(script); resolve(data); };
+    script.src = `${API_URL}?${qs}`;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; reject(new Error('Conexión')); };
     document.body.appendChild(script);
   });
 }
 
-async function validarCodigo(){
-  const codigo=document.getElementById('input-codigo').value.trim();
-  const msg=document.getElementById('msg-codigo');
-  if(!codigo){mostrarMsg(msg,'error','⚠️ Ingresa tu código.');return;}
-  try{
-    const res=await apiCall({action:'validar',codigo});
-    if(res.ok){
-      E.codigo=codigo;E.tipoAcceso=res.tipo;
-      let m=`✅ Código válido (${res.tipo.toUpperCase()})`;
-      if(res.dias_restantes&&res.dias_restantes<=7)m+=` ⚠️ Vence en ${res.dias_restantes} días`;
-      mostrarMsg(msg,'ok',m);
-      setTimeout(()=>showScreen('s-registro'),1500);
-    }else{mostrarMsg(msg,'error','❌ '+res.error);}
-  }catch(e){mostrarMsg(msg,'error','❌ Error de conexión. Intenta de nuevo.');}
+function showTab(tab, ev) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  if (ev && ev.target) ev.target.classList.add('active');
+  if (tab === 'codigos') cargarCodigos();
+  if (tab === 'resultados') cargarResultados();
 }
 
-function mostrarMsg(el,tipo,txt){el.className=`msg ${tipo} show`;el.textContent=txt;setTimeout(()=>el.classList.remove('show'),5000);}
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-
-function mostrarModalInicio(){
-  const nombre=document.getElementById('reg-nombre').value.trim();
-  const curp=document.getElementById('reg-curp').value.trim();
-  const tutor=document.getElementById('reg-tutor').value.trim();
-  const tel=document.getElementById('reg-tel').value.trim();
-  const area=document.getElementById('reg-area').value;
-  const msg=document.getElementById('msg-registro');
-  if(!nombre||!curp||!tutor||!tel||!area){mostrarMsg(msg,'error','⚠️ Completa todos los campos obligatorios.');return;}
-  if(curp.length!==18){mostrarMsg(msg,'error','⚠️ El CURP debe tener 18 caracteres.');return;}
-  E.nombre=nombre;E.curp=curp;E.correo=document.getElementById('reg-correo').value.trim();
-  E.tutor=tutor;E.tel=tel;E.area=area;E.carrera=document.getElementById('reg-carrera').value;
-  document.getElementById('modal-txt-inicio').textContent=E.tipoAcceso==='demo'
-    ?`Demo: ${PREGUNTAS.length} preguntas. Sin guardar historial.`
-    :E.tipoAcceso==='practica'
-    ?`Práctica: ${PREGUNTAS.length} preguntas, 3 horas. Con feedback.`
-    :`Evaluación: ${PREGUNTAS.length} preguntas, 3 horas. Sin feedback (como examen real).`;
-  document.getElementById('modal-inicio').classList.add('show');
+function setFecha(dias) {
+  let fecha = dias === 'examen' ? new Date('2026-08-01') : (() => { const d = new Date(); d.setDate(d.getDate() + dias); return d; })();
+  const yyyy = fecha.getFullYear(), mm = String(fecha.getMonth()+1).padStart(2,'0'), dd = String(fecha.getDate()).padStart(2,'0');
+  document.getElementById('fecha-input').value = `${yyyy}-${mm}-${dd}`;
 }
 
-function cerrarModalInicio(){document.getElementById('modal-inicio').classList.remove('show');}
+let creando = false;
+async function crearCodigo() {
+  if (creando) return;
+  const btn = document.getElementById('btn-crear');
+  const msg = document.getElementById('msg-crear');
+  const codigo = document.getElementById('codigo-input').value.trim();
+  const alumno = document.getElementById('alumno-input').value.trim();
+  const area = document.getElementById('area-select').value;
+  const tutor = document.getElementById('tutor-input').value.trim();
+  const tel = document.getElementById('tel-input').value.trim();
+  const fecha = document.getElementById('fecha-input').value;
 
-async function confirmarInicio(){
-  cerrarModalInicio();
-  try{await apiCall({action:'registrar_usuario',curp:E.curp,nombre:E.nombre,email:E.correo,tutor:E.tutor,tel_tutor:E.tel,area:E.area,carrera:E.carrera});}catch(e){console.warn('Registro:',e.message);}
-  try{await apiCall({action:'usar',codigo:E.codigo});}catch(e){console.warn('Uso:',e.message);}
-  E.tiempoInicio=new Date();E.modo=E.tipoAcceso==='full'?'evaluacion':E.tipoAcceso;
-  document.getElementById('hdr-nombre').textContent=E.nombre.split(' ')[0];
-  document.getElementById('hdr-meta').textContent=`Área: ${E.area}`;
-  showScreen('s-examen');renderNav();mostrarPregunta(0);iniciarTimer();
+  if (!codigo) return showMsg(msg,'error','⚠️ Falta el código.');
+  if (!area) return showMsg(msg,'error','⚠️ Selecciona un área.');
+  if (!fecha) return showMsg(msg,'error','⚠️ Define fecha de caducidad.');
+
+  creando = true; btn.disabled = true; btn.textContent = '⏳ Creando...';
+  try {
+    const res = await apiCall({action:'crear', codigo, alumno, area, tutor, tel_tutor:tel, expira:fecha});
+    if (res.ok) {
+      showMsg(msg,'success',`✅ Código creado. Vigencia: ${res.dias_vigencia} días.`);
+      document.getElementById('codigo-mostrado').textContent = res.codigo;
+      document.getElementById('codigo-generado').style.display = 'block';
+      document.getElementById('codigo-input').value = '';
+      document.getElementById('alumno-input').value = '';
+      cargarCodigos();
+    } else showMsg(msg,'error','❌ '+res.error);
+  } catch(e) { showMsg(msg,'error','❌ Error. No uses Brave.'); }
+  finally { creando = false; btn.disabled = false; btn.textContent = '✓ Crear código FULL'; }
 }
 
-function iniciarTimer(){
-  const dur=E.tipoAcceso==='demo'?3600:10800;let seg=dur;
-  E.timerInterval=setInterval(()=>{seg--;E.tiempoUsado=dur-seg;
-    const h=Math.floor(seg/3600),m=Math.floor((seg%3600)/60),s=seg%60;
-    document.getElementById('timer-display').textContent=`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    if(seg<=0){clearInterval(E.timerInterval);confirmarFinalizar();}
-  },1000);
+function copiarCodigo() {
+  const codigo = document.getElementById('codigo-mostrado').textContent;
+  navigator.clipboard.writeText(codigo);
+  alert('Copiado: ' + codigo);
 }
 
-function renderNav(){
-  const wrap=document.getElementById('nav-preguntas');wrap.innerHTML='';
-  PREGUNTAS.forEach((p,i)=>{const btn=document.createElement('div');btn.className='nav-q'+(i===0?' actual':'')+(E.respuestas[i]!==undefined?' respondida':'');btn.textContent=i+1;btn.onclick=()=>mostrarPregunta(i);wrap.appendChild(btn);});
+async function cargarCodigos() {
+  try {
+    const res = await apiCall({action:'listar'});
+    const tbody = document.getElementById('codigos-list');
+    if (!res.ok || !res.codigos.length) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px;">Sin códigos</td></tr>'; return; }
+    tbody.innerHTML = res.codigos.map(c => `
+      <tr>
+        <td><strong>${c.codigo}</strong></td>
+        <td>${c.alumno || '—'}</td>
+        <td><span class="badge badge-${c.area || 'iycfm'}">${(c.area || '—').toUpperCase()}</span></td>
+        <td><span class="badge badge-${c.estado}">${c.estado}</span></td>
+        <td>${new Date(c.expira).toLocaleDateString('es-MX')}</td>
+        <td>
+          <button class="btn btn-small btn-rojo" onclick="borrarCodigo('${c.codigo}')">🗑</button>
+          <button class="btn btn-small" onclick="toggleCodigo('${c.codigo}','${c.estado}')">${c.estado==='activo'?'🔒':'🔓'}</button>
+        </td>
+      </tr>`).join('');
+  } catch(e){}
 }
 
-function mostrarPregunta(idx){
-  if(idx<0||idx>=PREGUNTAS.length)return;E.preguntaActual=idx;const p=PREGUNTAS[idx];
-  document.querySelectorAll('.nav-q').forEach((el,i)=>el.classList.toggle('actual',i===idx));
-  document.getElementById('area-badge').textContent=`${p.a} · ${p.suj}`;
-  document.getElementById('pregunta-num').textContent=idx+1;
-  document.getElementById('pregunta-txt').textContent=p.q;
-  const resp=Object.keys(E.respuestas).length;
-  document.getElementById('prog-texto').textContent=`Pregunta ${idx+1} de ${PREGUNTAS.length}`;
-  document.getElementById('prog-resp').textContent=`${resp} respondidas`;
-  document.getElementById('prog-fill').style.width=`${(resp/PREGUNTAS.length)*100}%`;
-  const letras=['A','B','C','D'];const wrapOps=document.getElementById('opciones-wrap');wrapOps.innerHTML='';
-  p.o.forEach((opt,oi)=>{const div=document.createElement('div');div.className='opcion'+(E.respuestas[idx]===oi?' selected':'');div.innerHTML=`<div class="opcion-letra">${letras[oi]}</div><div>${opt}</div>`;div.onclick=()=>selResp(idx,oi);wrapOps.appendChild(div);});
-  document.getElementById('btn-anterior').disabled=idx===0;
+async function borrarCodigo(codigo) {
+  if (!confirm(`¿Borrar ${codigo}?`)) return;
+  await apiCall({action:'borrar', codigo});
+  cargarCodigos();
 }
 
-function selResp(idx,oi){
-  E.respuestas[idx]=oi;document.querySelectorAll('.opcion').forEach((el,i)=>el.classList.toggle('selected',i===oi));
-  document.querySelectorAll('.nav-q')[idx].classList.add('respondida');
-  const resp=Object.keys(E.respuestas).length;
-  document.getElementById('prog-resp').textContent=`${resp} respondidas`;
-  document.getElementById('prog-fill').style.width=`${(resp/PREGUNTAS.length)*100}%`;
-  setTimeout(()=>{if(idx<PREGUNTAS.length-1)mostrarPregunta(idx+1);},E.modo!=='evaluacion'?1000:300);
+async function toggleCodigo(codigo, estadoActual) {
+  const nuevo = estadoActual === 'activo' ? 'bloqueado' : 'activo';
+  await apiCall({action:'toggle', codigo, estado: nuevo});
+  cargarCodigos();
 }
 
-function navPregunta(dir){mostrarPregunta(E.preguntaActual+dir);}
-function confirmarFinalizar(){if(confirm('¿Finalizar el examen?')){clearInterval(E.timerInterval);procesarResultados();}}
-
-async function procesarResultados(){
-  showScreen('s-feedback');
-  const areas={};let total=0;
-  PREGUNTAS.forEach((p,i)=>{if(!areas[p.suj])areas[p.suj]={correctas:0,total:0};areas[p.suj].total++;if(E.respuestas[i]===p.r){areas[p.suj].correctas++;total++;}});
-  const debiles=Object.entries(areas).filter(([n,a])=>a.correctas/a.total<0.6).map(([n])=>n);
-  const fuertes=Object.entries(areas).filter(([n,a])=>a.correctas/a.total>=0.7).map(([n])=>n);
-  const plan=debiles.length>0?debiles.map(t=>`${t} (refuerzo 3-5 días)`).join(', '):'Domina todas las áreas';
-  const carrieras=CARRERAS[E.area]||[];const alcanzables=carrieras.filter(c=>total>=c.m);
-  try{await apiCall({action:'guardar_resultado',codigo:E.codigo,alumno:E.nombre,modo:E.modo,puntaje:total,tiempo_seg:E.tiempoUsado,areas:JSON.stringify(areas),carrera_meta:E.carrera,corte:alcanzables.length>0?alcanzables[0].m:0,plan_estudio:JSON.stringify({fuertes,debiles,plan})});}catch(e){console.warn('Resultado:',e.message);}
-  await new Promise(r=>setTimeout(r,1000));
-  document.getElementById('feedback-contenido').innerHTML=`<div style="text-align:center;padding:20px 0;"><div style="font-family:'Outfit',sans-serif;font-size:48px;font-weight:800;color:#fff;">${total}/${PREGUNTAS.length}</div><div style="font-size:13px;color:var(--gray);margin-top:4px;">${Math.round(total/PREGUNTAS.length*100)}% · Aciertos</div></div>`;
-  setTimeout(()=>{
-    showScreen('s-resultados');document.getElementById('res-score').textContent=total;
-    document.getElementById('res-score-total').textContent=`de ${PREGUNTAS.length} aciertos`;
-    const mins=Math.floor(E.tiempoUsado/60),secs=E.tiempoUsado%60;
-    document.getElementById('res-tiempo').textContent=`⏱ Tiempo: ${mins} min ${secs} seg`;
-    document.getElementById('res-fortalezas').innerHTML=fuertes.length===0?'<div class="result-desc">Necesitas reforzar todas las áreas.</div>':fuertes.map(t=>`<div class="result-section fuerte"><div class="result-title">✅ ${t}</div></div>`).join('');
-    document.getElementById('res-debilidades').innerHTML=debiles.length===0?'<div class="result-desc">¡Excelente! No se detectaron debilidades claras.</div>':debiles.map(t=>`<div class="result-section debil"><div class="result-title">❌ ${t}</div><div class="result-desc">Enfócate en este tema para mejorar.</div></div>`).join('');
-    document.getElementById('res-plan').innerHTML=`<div class="result-desc">${plan}</div>`;
-    document.getElementById('res-carreras').innerHTML=alcanzables.length===0?`<div class="result-desc">Con ${total} aciertos necesitas más preparación. ¡Sigue practicando!</div>`:alcanzables.map(c=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;">${c.n} <span style="color:var(--gray);">(${c.m} pts)</span></div>`).join('');
-  },500);
+async function buscarUsuario() {
+  const q = document.getElementById('curp-search').value.trim();
+  const out = document.getElementById('user-detail');
+  if (!q) { out.innerHTML='<div class="msg info">Ingresa un CURP, código o nombre.</div>'; return; }
+  try {
+    const res = await apiCall({action:'listar_resultados'});
+    if (!res.ok) { out.innerHTML='<div class="msg error">Error.</div>'; return; }
+    const f = res.resultados.filter(r =>
+      (r.codigo && r.codigo.toUpperCase()===q) ||
+      (r.alumno && r.alumno.toUpperCase().includes(q))
+    );
+    if (!f.length) { out.innerHTML='<div class="msg info">Sin registros.</div>'; return; }
+    out.innerHTML = `
+      <div class="msg success">${f.length} registro(s) encontrado(s).</div>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Fecha</th><th>Alumno</th><th>Área</th><th>Puntaje</th><th>%</th></tr></thead>
+        <tbody>${f.map(r => `
+          <tr>
+            <td>${r.fecha_legible || new Date(r.fecha).toLocaleString('es-MX')}</td>
+            <td>${r.alumno}</td>
+            <td><span class="badge badge-${r.area || 'iycfm'}">${(r.area || '—').toUpperCase()}</span></td>
+            <td><strong>${r.puntaje}</strong>/${r.total_preguntas || 140}</td>
+            <td>${r.porcentaje || Math.round(r.puntaje/(r.total_preguntas||140)*100)}%</td>
+          </tr>`).join('')}</tbody>
+      </table>`;
+  } catch(e){ out.innerHTML='<div class="msg error">Conexión.</div>'; }
 }
 
-function volverAlInicio(){E={codigo:'',tipoAcceso:'',nombre:'',curp:'',correo:'',tutor:'',tel:'',area:'',carrera:'',modo:null,respuestas:{},preguntaActual:0,tiempoInicio:null,timerInterval:null,tiempoUsado:0};showScreen('s-codigo');}
-function cerrarModalBloqueado(){document.getElementById('modal-bloqueado').classList.remove('show');}
+async function cargarResultados() {
+  try {
+    const res = await apiCall({action:'listar_resultados'});
+    const tbody = document.getElementById('resultados-list');
+    if (!res.ok || !res.resultados.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:20px;">Sin resultados</td></tr>'; return; }
+    tbody.innerHTML = res.resultados.slice(-30).reverse().map(r => {
+      const pct = r.porcentaje || Math.round(r.puntaje/(r.total_preguntas||140)*100);
+      const color = pct>=75 ? '#4ade80' : pct>=50 ? '#fcd34d' : '#f87171';
+      return `<tr>
+        <td style="font-size:11px;">${r.fecha_legible || new Date(r.fecha).toLocaleString('es-MX')}</td>
+        <td><strong>${r.alumno}</strong></td>
+        <td><span class="badge badge-${r.area || 'iycfm'}">${(r.area || '—').toUpperCase()}</span></td>
+        <td><strong>${r.puntaje}</strong>/${r.total_preguntas || 140}</td>
+        <td style="color:${color};font-weight:700;">${pct}%</td>
+        <td>${Math.round(r.tiempo_seg/60)} min</td>
+        <td style="font-size:11px;">${r.carrera_meta || '—'}</td>
+      </tr>`;
+    }).join('');
+  } catch(e){}
+}
 
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('reg-area').addEventListener('change',(e)=>{
-    const area=e.target.value;const carreras=CARRERAS[area]||[];const select=document.getElementById('reg-carrera');
-    select.innerHTML='<option value="">Selecciona carrera</option>'+carreras.map(c=>`<option value="${c.n}">${c.n}</option>`).join('');
-  });
-});
+function showMsg(el, tipo, txt) {
+  el.className = `msg ${tipo}`;
+  el.textContent = txt;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display='none', 5000);
+}
 </script>
-<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
 </body>
 </html>
