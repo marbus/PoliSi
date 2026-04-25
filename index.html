@@ -502,9 +502,15 @@ async function procesarResultados() {
 
   const porMat = {}; let total = 0;
   E.preguntas.forEach((p,i) => {
-    if (!porMat[p.materia]) porMat[p.materia] = {correctas:0, total:0};
+    if (!porMat[p.materia]) porMat[p.materia] = {correctas:0, total:0, subtemas:{}};
     porMat[p.materia].total++;
-    if (E.respuestas[i] === p.r) { porMat[p.materia].correctas++; total++; }
+    const esCorrecta = E.respuestas[i] === p.r;
+    if (esCorrecta) { porMat[p.materia].correctas++; total++; }
+    // Capturar subtemas
+    const sub = p.subtema || 'General';
+    if (!porMat[p.materia].subtemas[sub]) porMat[p.materia].subtemas[sub] = {correctas:0, total:0};
+    porMat[p.materia].subtemas[sub].total++;
+    if (esCorrecta) porMat[p.materia].subtemas[sub].correctas++;
   });
   const debiles = Object.entries(porMat).filter(([n,a]) => a.correctas/a.total < 0.6).map(([n]) => n);
   const fuertes = Object.entries(porMat).filter(([n,a]) => a.correctas/a.total >= 0.7).map(([n]) => n);
